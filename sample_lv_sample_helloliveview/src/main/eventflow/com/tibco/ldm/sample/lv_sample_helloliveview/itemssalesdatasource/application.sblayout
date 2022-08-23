@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DataControl">
+        <param name="gui:x" value="-157"/>
+        <param name="gui:y" value="-86"/>
+    </component>
+    <component name="DiscountControl">
+        <param name="gui:x" value="-157"/>
+        <param name="gui:y" value="13"/>
+    </component>
+    <component name="DiscountTable">
+        <param name="gui:x" value="122"/>
+        <param name="gui:y" value="158"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="FeedSimulation">
+        <param name="gui:x" value="-34"/>
+        <param name="gui:y" value="-86"/>
+    </component>
+    <component name="GetNow">
+        <param name="gui:x" value="183"/>
+        <param name="gui:y" value="3"/>
+    </component>
+    <component name="InjectDiscount">
+        <param name="gui:x" value="86"/>
+        <param name="gui:y" value="3"/>
+        <param name="gui:bends:1" value="47,-46;65,33"/>
+    </component>
+    <component name="StatusLog">
+        <param name="gui:x" value="86"/>
+        <param name="gui:y" value="-96"/>
+    </component>
+    <component name="UpdateDiscount">
+        <param name="gui:x" value="-34"/>
+        <param name="gui:y" value="13"/>
+    </component>
+    <component name="DataOut">
+        <param name="gui:x" value="263"/>
+        <param name="gui:y" value="3"/>
+    </component>
+    <component name="Note">
+        <param name="gui:x" value="-162"/>
+        <param name="gui:y" value="-171"/>
+        <param name="gui:width" value="70"/>
+        <param name="gui:height" value="70"/>
+    </component>
+</application-layout>
