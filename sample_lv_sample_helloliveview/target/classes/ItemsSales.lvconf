@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+
+    <!-- This file configures our primary data table of ItemsSales which has sales information over time.
+         Below, this configuration declares a StreamBase EventFlow application file as the data source, meaning
+         that the application file will be streaming data to this table.  -->
+	<data-table id="ItemsSales"
+	            description="Live view of all items sold over time, quantity in stock and the last sold price"
+	            short-description="Sales transactions">
+		<fields>		
+			<field name="transactionID" type="long"></field>
+			<field name="transactionTime" type="timestamp"></field>
+			<field name="Item" type="string"></field>
+			<field name="category" type="string"></field>
+			<field name="quantityRemaining" type="int"></field>
+			<field name="lastSoldPrice" type="double"></field>
+		</fields>
+		<primary-key>
+			<field ref="transactionID" />
+		</primary-key>
+
+                <indices>
+                  <index>
+                    <field ref="transactionTime"/>
+                  </index>
+                </indices>
+
+		<!-- This declares that an output stream from our data source application (defined
+		     in ItemsDataSource.lvconf) feeds our table. This application is started as
+		     soon as all LiveView tables have loaded. -->
+		<data-sources>
+			<data-source>
+				<application output-stream="DataOut" application-ref="ItemsSalesDataSource" />
+			</data-source>
+		</data-sources>
+	</data-table>
+
+</liveview-configuration>

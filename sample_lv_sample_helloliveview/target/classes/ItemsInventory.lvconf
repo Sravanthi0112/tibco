@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liveview-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.streambase.com/schemas/lvconf/">
+	
+	<!-- This file configures a table, often referred to as an "Aggregate Table",
+	      since it will not receive data from external sources, but rather populate
+	      and update in response to data in another table. -->
+	<data-table id="ItemsInventory"
+		        description="Live view of total inventory dollar exposure at current pricing, aggregated by category"
+	            short-description="Total inventory by category">
+	    <!-- This table will aggregate the ItemsSales table by category. -->
+		<fields>
+			<field name="category" type="string"></field>
+			<field name="quantityAvg" type="double"></field>
+			<field name="priceAvg" type="double"></field> <!-- Average price of items in the category group -->
+			<field name="totalSales" type="int"></field>
+			<field name="totalInventory" type="double"></field> <!-- The total dollars held in inventory for the group -->
+		</fields>
+		<primary-key>
+		    <!-- This is the aggregate key, or the "group by" in SQL terms -->
+			<field ref="category"/>
+		</primary-key>
+		
+		<!-- This declares that this table is sourced from the ItemsSales table for aggregation.
+		     With this declaration, the LiveView server is always updating fields in this
+		     table based on the mapping below. -->
+		<data-sources>
+			<data-source>
+				<aggregation table-ref="ItemsSales">
+					<query>
+					<!-- This aggregate projection is a standard StreamBase SSQL expression -->
+						<projection>avg(quantityRemaining) as quantityAvg, avg(lastSoldPrice) as priceAvg, count() as totalSales, avg(lastSoldPrice*quantityRemaining) as totalInventory</projection>
+					</query>
+				</aggregation>
+			</data-source>
+		</data-sources>
+	</data-table>
+
+</liveview-configuration>

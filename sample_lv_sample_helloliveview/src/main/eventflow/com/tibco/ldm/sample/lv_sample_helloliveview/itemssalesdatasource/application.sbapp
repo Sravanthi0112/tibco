@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <gui.metadata>
+            <property name="description" value="This application is started automatically by the LiveView server after all LiveView tables are ready. This example application executes a feed simulation, where category and color are null; a Map operator assigns these two fields with valid values. See &quot;ItemsSalesDataSource.lvconf&quot; to find the reference to this application."/>
+        </gui.metadata>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.tibco.ldm.sample.lv_sample_helloliveview.itemssalesdatasource.application"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="lvinterfaces.ItemsSalesDataSource"/>
+        <import from="lvinterfaces.ItemsSalesSchemas"/>
+        <parameter-definitions>
+            <parameter default="0.9" name="INCREASE_DISCOUNT"/>
+            <parameter default="1.1" name="DECREASE_DISCOUNT"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="DiscountTable" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="category" type="string"/>
+                    <field name="Discount" type="double"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="category"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="DataControl" scope="public">
+            <property name="description" value="The DataControl stream can be used to suspend, resume, or scale the output of the FeedSimulation adapter.&#13;&#10;&#13;&#10;For more details about the control port, see the &quot;Feed Simulation Input Adapter&quot; documentation."/>
+            <schema description="The DataControl stream can be used to suspend, resume, or scale the output of the FeedSimulation adapter.&#13;&#10;&#13;&#10;For more details about the control port, see the &quot;Feed Simulation Input Adapter&quot; documentation.">
+                <field description="One of: start stop suspend resume scale maxtuples maxtime" name="command" type="string"/>
+                <field description="Value used with:  scale maxtuples maxtime" name="value" type="double"/>
+            </schema>
+        </stream>
+        <stream name="DiscountControl" scope="public">
+            <schema>
+                <field name="PriceChange" type="double"/>
+                <field name="category" type="string"/>
+            </schema>
+        </stream>
+        <box name="FeedSimulation" type="inputadapter">
+            <input port="1" stream="DataControl"/>
+            <output port="1" stream="out:FeedSimulation_1"/>
+            <output port="2" stream="out:FeedSimulation_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.sbfeedsim.SBFeedsim"/>
+            <param name="enableControlPort" value="true"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="reportRateS" value="0"/>
+            <param name="sbfsFileName" value="ItemsSales.sbfs"/>
+            <param name="waitForStartCommand" value="false"/>
+        </box>
+        <box name="UpdateDiscount" type="query">
+            <input port="1" stream="DiscountControl"/>
+            <output port="1" stream="out:UpdateDiscount_1"/>
+            <dataref id="querytable" name="DiscountTable"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="category"/>
+            <param name="key-value.0" value="input.category"/>
+            <param name="write-type" value="update"/>
+            <param name="if-write-fails" value="insert"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="all"/>
+                <item name="current" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Discount">PriceChange</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Discount">Discount * PriceChange</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Discount">if (input.Discount) then .95 else 1.05</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="InjectDiscount" type="query">
+            <input port="1" stream="out:FeedSimulation_2"/>
+            <output port="1" stream="out:InjectDiscount_1"/>
+            <dataref id="querytable" name="DiscountTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="category"/>
+            <param name="key-value.0" value="input.category"/>
+            <param name="key-lowerbound-value.0" value="input.category"/>
+            <param name="key-lowerbound-operation.0" value="eq"/>
+            <param name="key-upperbound-operation.0" value="none"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="lastSoldPrice">if (isnull(Discount)) then lastSoldPrice else lastSoldPrice * Discount</replace>
+                </item>
+                <item name="current" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Discount">if (input.Discount) then .95 else 1.05</set>
+                </expressions>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Discount">if (input.Discount) then old.Discount * 1.05 else old.Discount * .95</set>
+                </expressions>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Discount">if (input.Discount) then .95 else 1.05</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="StatusLog" type="outputadapter">
+            <input port="1" stream="out:FeedSimulation_1"/>
+            <output port="1" stream="out:StatusLog_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressIgnoreTimestampFields" value="true"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="logLevel" value="Debug"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="messageIdentifier" value="Feedsim"/>
+            <param name="messageIdentifierExpression" value=""/>
+            <param name="messageIdentifierType" value="Basic"/>
+            <param name="messagePrefix" value=""/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="verbose" value="true"/>
+        </box>
+        <box name="GetNow" type="map">
+            <input port="1" stream="out:InjectDiscount_1"/>
+            <output port="1" stream="DataOut"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="transactionTime">now()</replace>
+                </item>
+            </target-list>
+        </box>
+        <output-stream name="DataOut" schema="ItemsSalesDataInSchema" scope="public"/>
+        <gui.note name="Note">
+            <property name="description" value="See the Metadata tab for a description of this application."/>
+        </gui.note>
+    </add>
+</modify>

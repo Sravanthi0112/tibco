@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbfs:Simulation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:sbfs="http://www.streambase.com/schemas/feedsim/02/SBFS" Description="Generates data suitable for the ItemsSales LiveView data table.  The first five fields are required by LiveView as metadata, however all maybe null.">
+  <SimStreams Name="DataIn">
+    <ProcessingOptions DataRatePerSecond="1.0" DataGenerationMethod="Custom"/>
+    <Schema>
+      <Fields Name="PublisherID" DataTypeName="string" Description="">
+        <Distribution GenerationMethod="Constant" ConstantValue="feedsim" UseRandomSize="true" BlobMinSize="4"/>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="PublisherSN" DataTypeName="long" Description="">
+        <Distribution GenerationMethod="Incremented" MaxValue="100000.0"/>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="CQSReferredCount" DataTypeName="long" Description="">
+        <Distribution GenerationMethod="Constant" ConstantValue="null"/>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="CQSDataUpdatePredicate" DataTypeName="string" Description="">
+        <Distribution GenerationMethod="Constant" ConstantValue="null" UseRandomSize="true" NumRandomEnumValues="1" BlobMinSize="4"/>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="CQSDelete" Description="">
+        <Distribution GenerationMethod="Constant" MaxValue="1.0" ConstantValue="null"/>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="transactionID" DataTypeName="long" Description="">
+        <Distribution GenerationMethod="Incremented" MinValue="1.0" MaxValue="9.9999999E7" StartValue="1.0" Cycle="true"/>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="transactionTime" DataTypeName="timestamp" Description="">
+        <Distribution GenerationMethod="Constant" ConstantValue="null"/>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="Item" DataTypeName="string" Description="">
+        <Distribution GenerationMethod="Enumerated" UseRandomSize="true" NumRandomEnumValues="33" EnumeratedDistMethod="SpecifiedValues" BlobMinSize="4">
+          <EnumeratedDist weight="1.0" value="Teddy Bear"/>
+          <EnumeratedDist weight="1.0" value="Bicycle"/>
+          <EnumeratedDist weight="1.0" value="Wagon"/>
+          <EnumeratedDist weight="1.0" value="Doll"/>
+          <EnumeratedDist weight="1.0" value="Cellphone"/>
+          <EnumeratedDist weight="1.0" value="Earphones"/>
+          <EnumeratedDist weight="1.0" value="Charger"/>
+          <EnumeratedDist weight="1.0" value="Music Player"/>
+          <EnumeratedDist weight="1.0" value="Battery"/>
+          <EnumeratedDist weight="1.0" value="Floor Mat"/>
+          <EnumeratedDist weight="1.0" value="Fuzzy Dice"/>
+          <EnumeratedDist weight="1.0" value="Anti Freeze"/>
+          <EnumeratedDist weight="1.0" value="Hamlet"/>
+          <EnumeratedDist weight="1.0" value="Don Quixote"/>
+          <EnumeratedDist weight="1.0" value="Tom Sawyer"/>
+          <EnumeratedDist weight="1.0" value="Oliver Twist"/>
+          <EnumeratedDist weight="1.0" value="Dress Shoe"/>
+          <EnumeratedDist weight="1.0" value="Leather Jacket"/>
+          <EnumeratedDist weight="1.0" value="Prom Dress"/>
+          <EnumeratedDist weight="1.0" value="Fedora Hat"/>
+        </Distribution>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="category" DataTypeName="string" Description="">
+        <Distribution GenerationMethod="Conditional" ConstantValue="null" UseRandomSize="true" BlobMinSize="4">
+          <ConditionalCases>
+            <FieldDependedOn>Item</FieldDependedOn>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Teddy Bear"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="toy"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Bicycle"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="toy"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Wagon"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="toy"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Doll"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="toy"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Cellphone"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="electronics"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Earphones"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="electronics"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Charger"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="electronics"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Music Player"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="electronics"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Battery"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="automotive"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Floor Mat"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="automotive"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Fuzzy Dice"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="automotive"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Anti Freeze"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="automotive"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Tom Sawyer"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="book"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Oliver Twist"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="book"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Don Quixote"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="book"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Hamlet"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="book"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Dress Shoe"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="clothes"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Leather Jacket"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="clothes"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Prom Dress"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="clothes"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Fedora Hat"/>
+              <Distribution GenerationMethod="Constant" ConstantValue="clothes"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="" MatchAnyValue="true"/>
+              <Distribution GenerationMethod="Constant" ConstantValue=""/>
+            </Cases>
+          </ConditionalCases>
+        </Distribution>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="quantityRemaining" DataTypeName="int" Description="">
+        <Distribution GenerationMethod="Conditional">
+          <ConditionalCases>
+            <FieldDependedOn>Item</FieldDependedOn>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Teddy Bear"/>
+              <Distribution GenerationMethod="Random" MaxValue="500.0" StartValue="200.0" Delta="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Bicycle"/>
+              <Distribution GenerationMethod="Random" MaxValue="100.0" StartValue="75.0" Delta="3.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Wagon"/>
+              <Distribution GenerationMethod="Random" MaxValue="40.0" StartValue="20.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Doll"/>
+              <Distribution GenerationMethod="Random" MaxValue="50.0" StartValue="25.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Cellphone"/>
+              <Distribution GenerationMethod="Random" MaxValue="200.0" StartValue="100.0" Delta="3.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Earphones"/>
+              <Distribution GenerationMethod="Random" MaxValue="500.0" StartValue="400.0" Delta="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Charger"/>
+              <Distribution GenerationMethod="Random" MaxValue="200.0" StartValue="100.0" Delta="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="IThing"/>
+              <Distribution GenerationMethod="Random" MaxValue="400.0" StartValue="100.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Battery"/>
+              <Distribution GenerationMethod="Random" MaxValue="75.0" StartValue="40.0" Delta="3.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Floor Mat"/>
+              <Distribution GenerationMethod="Random" MaxValue="300.0" StartValue="40.0" Delta="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Fuzzy Dice"/>
+              <Distribution GenerationMethod="Random" MaxValue="400.0" StartValue="50.0" Delta="3.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="AntiFreeze"/>
+              <Distribution GenerationMethod="Random" MaxValue="200.0" StartValue="40.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Hamlet"/>
+              <Distribution GenerationMethod="Random" MaxValue="150.0" StartValue="50.0" Delta="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Don Quixote"/>
+              <Distribution GenerationMethod="Random" MaxValue="150.0" StartValue="50.0" Delta="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Tom Sawyer"/>
+              <Distribution GenerationMethod="Random" MaxValue="100.0" StartValue="50.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Oliver Twist"/>
+              <Distribution GenerationMethod="Random" MaxValue="100.0" StartValue="50.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Shoes"/>
+              <Distribution GenerationMethod="Random" MaxValue="100.0" StartValue="50.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Jacket"/>
+              <Distribution GenerationMethod="Random" MaxValue="50.0" StartValue="50.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Dress"/>
+              <Distribution GenerationMethod="Random" MaxValue="75.0" StartValue="50.0" Delta="3.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Hat"/>
+              <Distribution GenerationMethod="Random" MaxValue="125.0" StartValue="50.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="" MatchAnyValue="true"/>
+              <Distribution GenerationMethod="Random" MaxValue="100.0" StartValue="50.0"/>
+            </Cases>
+          </ConditionalCases>
+        </Distribution>
+        <DataSourceMapping/>
+      </Fields>
+      <Fields Name="lastSoldPrice" DataTypeName="double" Description="">
+        <Distribution GenerationMethod="Conditional" MinValue="10.0" MaxValue="60.0">
+          <ConditionalCases>
+            <FieldDependedOn>Item</FieldDependedOn>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Teddy Bear"/>
+              <Distribution GenerationMethod="Random" MinValue="5.0" MaxValue="20.0" StartValue="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Bicycle"/>
+              <Distribution GenerationMethod="Random" MinValue="50.0" MaxValue="200.0" StartValue="75.0" Delta="3.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Wagon"/>
+              <Distribution GenerationMethod="Random" MinValue="30.0" MaxValue="70.0" StartValue="40.0" Delta="3.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Doll"/>
+              <Distribution GenerationMethod="Random" MinValue="15.0" MaxValue="80.0" StartValue="30.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Cellphone"/>
+              <Distribution GenerationMethod="Random" MinValue="20.0" MaxValue="100.0" StartValue="40.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Earphones"/>
+              <Distribution GenerationMethod="Random" MinValue="8.0" MaxValue="20.0" StartValue="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Charger"/>
+              <Distribution GenerationMethod="Random" MinValue="12.0" MaxValue="20.0" StartValue="15.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="IThing"/>
+              <Distribution GenerationMethod="Random" MinValue="50.0" MaxValue="200.0" StartValue="100.0" Delta="5.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Battery"/>
+              <Distribution GenerationMethod="Random" MinValue="75.0" MaxValue="200.0" StartValue="100.0" Delta="3.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Floor Mat"/>
+              <Distribution GenerationMethod="Random" MinValue="10.0" MaxValue="30.0" StartValue="15.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Fuzzy Dice"/>
+              <Distribution GenerationMethod="Random" MinValue="5.0" MaxValue="20.0" StartValue="12.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="AntiFreeze"/>
+              <Distribution GenerationMethod="Random" MinValue="7.0" MaxValue="15.0" StartValue="12.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Hamlet"/>
+              <Distribution GenerationMethod="Random" MinValue="15.0" MaxValue="30.0" StartValue="20.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Tom Sawyer"/>
+              <Distribution GenerationMethod="Random" MinValue="7.0" MaxValue="12.0" StartValue="8.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Oliver Twist"/>
+              <Distribution GenerationMethod="Random" MinValue="8.0" MaxValue="15.0" StartValue="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Don Quixote"/>
+              <Distribution GenerationMethod="Random" MinValue="15.0" MaxValue="30.0" StartValue="20.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Shoes"/>
+              <Distribution GenerationMethod="Random" MinValue="20.0" MaxValue="300.0" StartValue="50.0" Delta="15.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Jacket"/>
+              <Distribution GenerationMethod="Random" MinValue="40.0" MaxValue="300.0" StartValue="100.0" Delta="15.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Dress"/>
+              <Distribution GenerationMethod="Random" MinValue="50.0" MaxValue="300.0" StartValue="100.0" Delta="10.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="Hat"/>
+              <Distribution GenerationMethod="Random" MinValue="10.0" MaxValue="50.0" StartValue="20.0"/>
+            </Cases>
+            <Cases>
+              <NamesAndValues Name="Item" Value="" MatchAnyValue="true"/>
+              <Distribution GenerationMethod="Random" MinValue="10.0" MaxValue="100.0" StartValue="50.0"/>
+            </Cases>
+          </ConditionalCases>
+        </Distribution>
+        <DataSourceMapping/>
+      </Fields>
+    </Schema>
+  </SimStreams>
+</sbfs:Simulation>
